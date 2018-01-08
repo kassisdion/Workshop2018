@@ -7,6 +7,7 @@ import com.workshop.workshop.api.ApiService
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -69,8 +70,9 @@ class NetworkModule {
     fun provideOkHttp(): OkHttpClient {
 
         return OkHttpClient.Builder().apply {
+            //Add HttpLoggingInterceptor (never add it in production code)
             if (BuildConfig.DEBUG) {
-                //Could add a HttpLoggingInterceptor (never add it in production code)
+                addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             }
 
             //Could add custom header here
