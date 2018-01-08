@@ -2,6 +2,7 @@
 
 buildscript {
     ext {
+        //Compiler
         gradle_version = '3.0.1'
         kotlin_version = '1.2.10'
 
@@ -17,6 +18,14 @@ buildscript {
         rules_version = '1.0.1'
         espresso_version = '3.0.1'
 
+        //architecture
+        dagger_version = '2.13'
+        rx_version = '2.1.4'
+
+        //Networking
+        okhttp_version = '3.8.1'
+        retrofit_version = '2.3.0'
+        moshi_version = '1.5.0'
     }
     repositories {
         google()
