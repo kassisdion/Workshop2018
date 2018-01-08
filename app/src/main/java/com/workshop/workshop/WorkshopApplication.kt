@@ -2,7 +2,10 @@ package com.workshop.workshop
 
 import android.app.Application
 import android.content.Context
+import com.workshop.workshop.di.DaggerWorkshopComponent
 import com.workshop.workshop.di.WorkshopComponent
+import com.workshop.workshop.di.module.AppModule
+import com.workshop.workshop.di.module.NetworkModule
 
 class WorkshopApplication : Application() {
 
@@ -38,6 +41,10 @@ class WorkshopApplication : Application() {
     ************************************************************************************************
     */
     private fun setupComponents() {
-        //Init di HERE
+        workshopComponent = DaggerWorkshopComponent
+                .builder()
+                .appModule(AppModule(this))
+                .networkModule(NetworkModule())
+                .build()
     }
 }
