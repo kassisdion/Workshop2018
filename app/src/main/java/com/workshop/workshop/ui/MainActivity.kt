@@ -1,7 +1,8 @@
-package com.workshop.workshop
+package com.workshop.workshop.ui
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.workshop.workshop.R
 
 class MainActivity : AppCompatActivity() {
 
