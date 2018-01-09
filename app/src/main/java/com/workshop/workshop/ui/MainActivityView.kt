@@ -2,6 +2,9 @@ package com.workshop.workshop.ui
 
 import com.workshop.workshop.ui.base.BaseView
 
+/**
+ * Simple Contract between [MainActivity] and [MainPresenter]
+ */
 interface MainActivityView : BaseView {
     fun showLoading(start: Boolean)
     fun showError(message: String?)

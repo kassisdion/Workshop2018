@@ -22,6 +22,9 @@ buildscript {
         dagger_version = '2.13'
         rx_version = '2.1.4'
 
+        //Image loading/cache
+        picassion_version = '2.5.2'
+
         //Networking
         okhttp_version = '3.8.1'
         retrofit_version = '2.3.0'

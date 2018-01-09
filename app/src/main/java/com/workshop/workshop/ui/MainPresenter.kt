@@ -26,9 +26,7 @@ constructor(private val apiService: ApiService) : BasePresenter<MainActivityView
     ** Public method
     ************************************************************************************************
      */
-    fun onPullToRefreshActionned() {
-        retrieveData(true)
-    }
+    fun onPullToRefreshActioned() = retrieveData(true)
 
     /*
     ************************************************************************************************
@@ -40,9 +38,9 @@ constructor(private val apiService: ApiService) : BasePresenter<MainActivityView
 
         disposables.add(apiService.getObjects()
                 .subscribeOn(Schedulers.io())
+                .map { rawObjectToUiObject(it) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate({ showLoadingAnimation(isRefreshing, false) })
-                .map { rawObjectToUiObject(it) }
                 .subscribe(
                         {
                             view?.apply {
@@ -56,10 +54,8 @@ constructor(private val apiService: ApiService) : BasePresenter<MainActivityView
         )
     }
 
-    private fun rawObjectToUiObject(rawObject: List<ObjectModel>) : List<UiObjectModel> {
-        return rawObject.map {
-            UiObjectModel(it.albumId, it.id, it.title, it.url, it.thumbnailUrl)
-        }
+    private fun rawObjectToUiObject(rawObject: List<ObjectModel>) = rawObject.map {
+        UiObjectModel(it.albumId, it.id, it.title, it.url, it.thumbnailUrl)
     }
 
     private fun showLoadingAnimation(isRefreshing: Boolean,

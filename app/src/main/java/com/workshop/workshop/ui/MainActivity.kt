@@ -1,7 +1,8 @@
 package com.workshop.workshop.ui
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.Toast
 import com.workshop.workshop.R
@@ -10,9 +11,20 @@ import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), MainActivityView {
+    /*
+    ************************************************************************************************
+    ** Private field
+    ************************************************************************************************
+     */
+    private var objectAdapter: ObjectAdapter = ObjectAdapter()
 
+    /*
+    ************************************************************************************************
+    ** Injection
+    ************************************************************************************************
+     */
     @Inject
-    lateinit var mPresenter: MainPresenter
+    lateinit var presenter: MainPresenter
 
     /*
     ************************************************************************************************
@@ -25,6 +37,11 @@ class MainActivity : AppCompatActivity(), MainActivityView {
 
         setupView()
         setupPresenter()
+    }
+
+    override fun onDestroy() {
+        presenter.onDetachView()
+        super.onDestroy()
     }
 
     /*
@@ -45,11 +62,11 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     }
 
     override fun populateObject(data: List<UiObjectModel>) {
-        //Call adapter.addAll(data) here
+        objectAdapter.populateObject(data)
     }
 
     override fun clearData() {
-        //Call adapter.clear here
+        objectAdapter.clearData()
     }
 
     /*
@@ -59,12 +76,20 @@ class MainActivity : AppCompatActivity(), MainActivityView {
      */
     private fun setupPresenter() {
         WorkshopApplication.workshopComponent.inject(this)
-        mPresenter.onAttachView(this)
+        presenter.onAttachView(this)
     }
 
-    fun setupView() {
+    private fun setupView() {
+        //Setup action bar
         setSupportActionBar(mainActivity_toolbar)
 
-        mainActivity_swipeRefreshLayout.setOnRefreshListener { mPresenter.onPullToRefreshActionned() }
+        //Setup swipe refresh layout
+        mainActivity_swipeRefreshLayout.setOnRefreshListener { presenter.onPullToRefreshActioned() }
+
+        //Setup recycler
+        mainActivity_recyclerView.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = objectAdapter
+        }
     }
 }
