@@ -53,6 +53,9 @@ class ObjectAdapter : RecyclerView.Adapter<ObjectAdapter.ViewHolder>() {
      */
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v), View.OnClickListener {
 
+        private var item: UiObjectModel? = null
+        private var shouldShowExtra: Boolean = false
+
         init {
             v.setOnClickListener(this)
         }
@@ -63,12 +66,11 @@ class ObjectAdapter : RecyclerView.Adapter<ObjectAdapter.ViewHolder>() {
         ********************************************************************************************
          */
         fun bind(item: UiObjectModel) {
-            Picasso.with(itemView.context)
-                    .load(item.thumbnailUrl)
-                    .placeholder(R.drawable.ic_loading)
-                    .into(itemView.itemObject_imageView)
+            this.item = item
+            this.shouldShowExtra = false
 
-            itemView.itemObject_textView.text = item.title
+            showData()
+            populateData()
         }
 
         /*
@@ -77,8 +79,49 @@ class ObjectAdapter : RecyclerView.Adapter<ObjectAdapter.ViewHolder>() {
         ********************************************************************************************
          */
         override fun onClick(v: View?) {
-            //Could show a new activity or a popup and display info about the selected item
+            shouldShowExtra = !shouldShowExtra
+
+            showData()
+            populateExtraData()
         }
 
+        /*
+        ********************************************************************************************
+        ** Private method
+        ********************************************************************************************
+         */
+        private fun showData() {
+            when(shouldShowExtra) {
+                true -> {
+                    itemView.itemObject_mainInfo.visibility = View.GONE
+                    itemView.itemObject_extraInfo.visibility = View.VISIBLE
+                }
+                false -> {
+                    itemView.itemObject_mainInfo.visibility = View.VISIBLE
+                    itemView.itemObject_extraInfo.visibility = View.GONE
+                }
+            }
+        }
+        private fun populateData() {
+            item?.let {
+                Picasso.with(itemView.context)
+                        .load(it.thumbnailUrl)
+                        .placeholder(R.drawable.ic_loading)
+                        .into(itemView.itemObject_imageView)
+
+                itemView.itemObject_textView.text = it.title
+            }
+        }
+
+        private fun populateExtraData() {
+            item?.let {
+                Picasso.with(itemView.context)
+                        .load(it.url)
+                        .placeholder(R.drawable.ic_loading)
+                        .into(itemView.itemObject_imageView_full)
+
+                itemView.itemObject_textView_full.text = it.title
+            }
+        }
     }
 }
