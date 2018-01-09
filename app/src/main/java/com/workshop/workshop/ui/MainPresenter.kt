@@ -1,7 +1,7 @@
 package com.workshop.workshop.ui
 
 import com.workshop.workshop.api.ApiService
-import com.workshop.workshop.api.response.ObjectResponse
+import com.workshop.workshop.api.response.ObjectModel
 import com.workshop.workshop.ui.base.BasePresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -42,9 +42,13 @@ constructor(private val apiService: ApiService) : BasePresenter<MainActivityView
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate({ showLoadingAnimation(isRefreshing, false) })
+                .map { rawObjectToUiObject(it) }
                 .subscribe(
                         {
-                            onObjectResponseRetrieve(it)
+                            view?.apply {
+                                clearData()
+                                populateObject(it)
+                            }
                         },
                         {
                             view?.showError(it.message)
@@ -52,16 +56,9 @@ constructor(private val apiService: ApiService) : BasePresenter<MainActivityView
         )
     }
 
-    private fun onObjectResponseRetrieve(response: ObjectResponse) {
-        //Convert raw data into 'ui formatted' data
-        val formattedData : List<UiObjectModel> = response.data.map {
+    private fun rawObjectToUiObject(rawObject: List<ObjectModel>) : List<UiObjectModel> {
+        return rawObject.map {
             UiObjectModel(it.albumId, it.id, it.title, it.url, it.thumbnailUrl)
-        }
-
-
-        view?.apply {
-            clearData()
-            populateObject(formattedData)
         }
     }
 

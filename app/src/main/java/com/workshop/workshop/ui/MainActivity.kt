@@ -2,8 +2,11 @@ package com.workshop.workshop.ui
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import com.workshop.workshop.R
 import com.workshop.workshop.WorkshopApplication
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), MainActivityView {
@@ -20,6 +23,7 @@ class MainActivity : AppCompatActivity(), MainActivityView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setupView()
         setupPresenter()
     }
 
@@ -29,23 +33,23 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     ************************************************************************************************
      */
     override fun showLoading(start: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mainActivity_progressBar.visibility = if (start) View.VISIBLE else View.GONE
     }
 
     override fun showError(message: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     override fun showRefreshing(start: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        mainActivity_swipeRefreshLayout.isRefreshing = start
     }
 
     override fun populateObject(data: List<UiObjectModel>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //Call adapter.addAll(data) here
     }
 
     override fun clearData() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //Call adapter.clear here
     }
 
     /*
@@ -56,5 +60,11 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     private fun setupPresenter() {
         WorkshopApplication.workshopComponent.inject(this)
         mPresenter.onAttachView(this)
+    }
+
+    fun setupView() {
+        setSupportActionBar(mainActivity_toolbar)
+
+        mainActivity_swipeRefreshLayout.setOnRefreshListener { mPresenter.onPullToRefreshActionned() }
     }
 }

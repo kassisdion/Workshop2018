@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Workshop</string>
+    <string name="mainActivity_title">workshop</string>
 </resources>
