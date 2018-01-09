@@ -1,7 +1,7 @@
 package com.workshop.workshop.api
 
-import com.workshop.workshop.api.response.ObjectResponse
-import io.reactivex.Single
+import com.workshop.workshop.api.response.ObjectModel
+import io.reactivex.Observable
 import retrofit2.http.GET
 
 interface ApiService {
@@ -11,5 +11,5 @@ interface ApiService {
     }
 
     @GET(PHOTO_END_POINT)
-    fun getObjects(): Single<ObjectResponse>
+    fun getObjects(): Observable<List<ObjectModel>>
 }
