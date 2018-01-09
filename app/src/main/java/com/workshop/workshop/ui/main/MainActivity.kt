@@ -1,4 +1,4 @@
-package com.workshop.workshop.ui
+package com.workshop.workshop.ui.main
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -7,10 +7,11 @@ import android.view.View
 import android.widget.Toast
 import com.workshop.workshop.R
 import com.workshop.workshop.WorkshopApplication
+import com.workshop.workshop.ui.main.adapter.ObjectAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), MainActivityView {
+class MainActivity : AppCompatActivity(), MainActivityContract.View {
     /*
     ************************************************************************************************
     ** Private field
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     ************************************************************************************************
      */
     @Inject
-    lateinit var presenter: MainPresenter
+    lateinit var presenter: MainActivityPresenter
 
     /*
     ************************************************************************************************
@@ -37,16 +38,23 @@ class MainActivity : AppCompatActivity(), MainActivityView {
 
         setupView()
         setupPresenter()
+
+        presenter.onAttachView(this, MainActivityState.getStateFromBundle(savedInstanceState))
     }
 
     override fun onDestroy() {
-        presenter.onDetachView()
         super.onDestroy()
+        presenter.onDetachView()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        MainActivityState.writeStateToBundle(outState, presenter.getState())
     }
 
     /*
     ************************************************************************************************
-    ** MainActivityView implementation
+    ** MainActivityContract implementation
     ************************************************************************************************
      */
     override fun showLoading(start: Boolean) {
@@ -74,11 +82,19 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     ** Private fun
     ************************************************************************************************
      */
+    /**
+     * Resolve every [Inject] annotated field
+     */
     private fun setupPresenter() {
         WorkshopApplication.workshopComponent.inject(this)
-        presenter.onAttachView(this)
     }
 
+    /**
+     * Will setup:
+     * -actionBar
+     * -swipeRefreshLayout
+     * -recycler/adapter
+     */
     private fun setupView() {
         //Setup action bar
         setSupportActionBar(mainActivity_toolbar)

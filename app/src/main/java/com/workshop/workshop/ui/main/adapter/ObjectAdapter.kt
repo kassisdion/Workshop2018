@@ -1,4 +1,4 @@
-package com.workshop.workshop.ui
+package com.workshop.workshop.ui.main.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import com.workshop.workshop.R
 import com.workshop.workshop.extension.inflate
+import com.workshop.workshop.ui.main.UiObjectModel
 import kotlinx.android.synthetic.main.item_object.view.*
 
 class ObjectAdapter : RecyclerView.Adapter<ObjectAdapter.ViewHolder>() {
@@ -36,13 +37,13 @@ class ObjectAdapter : RecyclerView.Adapter<ObjectAdapter.ViewHolder>() {
     ** RecyclerView.Adapter<ObjectAdapter.ViewHolder>() implementation
     ************************************************************************************************
      */
-    override fun onBindViewHolder(holder: ObjectAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
     }
 
     override fun getItemCount() = items.count()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ObjectAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflatedView = parent.inflate(R.layout.item_object, false)
         return ViewHolder(inflatedView)
     }

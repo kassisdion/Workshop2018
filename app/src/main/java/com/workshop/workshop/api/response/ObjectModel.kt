@@ -2,6 +2,7 @@ package com.workshop.workshop.api.response
 
 import com.squareup.moshi.Json
 
+
 data class ObjectModel(
         @Json(name = "albumId")
         val albumId: Long,
