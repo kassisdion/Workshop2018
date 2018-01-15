@@ -1,2 +1,4 @@
 # Workshop2018
-MVP Dagger2 Retrofit Rx Architecture component
+Simple Android app in kotlin (MVP with Dagger2, Retrofit, Rx) 
+Fech data in http://jsonplaceholder.typicode.com/photos and display the result in a simple recyclerView impl.
+
